@@ -1,7 +1,14 @@
 {
-  "name": "Spotify Playlist Export",
+  "name": "spotify-playlist-export",
   "version": "0.1.0",
+  "description": "Exports all spotify playlists to a file",
   "main": "src/main/Main.js",
+  "author": "David Michael Huber",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidmichaelhuber/spotify-playlist-export.git"
+  },
+  "license" : "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.3",
     "express": "^4.14.1",
