@@ -18,23 +18,30 @@ var SpotifyApiCom = (function() {
           },
           () => {
             resolve();
+          },
+          () => {
+            reject();
           });
       });
   }
 
-  /* Callback is called after each received page */
-  function callForEachPage(options, call, done) {
+  /* Calls call after each received page, done after last page was received */
+  function callForEachPage(options, call, done, failed) {
     request.get(options, function(error, response, body) {
-      if (response && response.statusCode !== 200) {
-        console.log("Error - API response status code: " + response.statusCode);
-        return;
-      }
-      call(body);
-      if(body && body.hasOwnProperty("next") && body.next != null) {
-        options.url = body.next;
-        callForEachPage(options, call, done);
+      if(body) {
+        if (response && response.statusCode !== 200) {
+          console.log("Error - API response status code: " + response.statusCode);
+          failed();
+        }
+        call(body);
+        if(body.hasOwnProperty("next") && body.next != null) {
+          options.url = body.next;
+          callForEachPage(options, call, done, error);
+        } else {
+          done();
+        }
       } else {
-        done();
+        failed();
       }
     });
   }
@@ -49,6 +56,9 @@ var SpotifyApiCom = (function() {
           console.log("Done loading playlists!");
           console.log("Playlist amount: " + playlists.length);
           return getPlaylists();
+        }, () => {
+          console.log("Failed loading playlists!");
+          return Promise.reject();
         }).then(() => {
           console.log("Start loading tracks...");
         });
