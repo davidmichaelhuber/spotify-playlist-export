@@ -1,0 +1,10 @@
+{
+  "name": "Spotify Playlist Export",
+  "version": "0.1.0",
+  "main": "src/main/Main.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.1",
+    "request": "^2.79.0"
+  }
+}
