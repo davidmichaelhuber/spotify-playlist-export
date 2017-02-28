@@ -1,4 +1,6 @@
-var AuthServer = (function() {
+module.exports = function() {
+  var module = {};
+
   var express = require('express');
   var request = require('request');
   var querystring = require('querystring');
@@ -12,6 +14,12 @@ var AuthServer = (function() {
 
   var stateKey = 'spotify_auth_state';
   var app = express();
+
+  module.start = function() {
+    setRoutes();
+    console.log('Listening on 8080');
+    app.listen(8080);
+  }
 
   function setRoutes() {
     app.use(express.static(__dirname + '/public'))
@@ -114,17 +122,5 @@ var AuthServer = (function() {
     return text;
   };
 
-  return function() {
-    // Nothing to do at instantiation
-    return {
-      start: function() {
-        setRoutes();
-        console.log('Listening on 8080');
-        app.listen(8080);
-      }
-    }
-  }
-
-})();
-
-module.exports = AuthServer();
+  return module;
+}();

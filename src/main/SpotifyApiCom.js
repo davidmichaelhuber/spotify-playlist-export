@@ -1,10 +1,28 @@
-var SpotifyApiCom = (function() {
+module.exports = function() {
+  var module = {};
+
   var request = require('request');
 
-  var SpotifyApiUrls = require('./SpotifyApiUrls.js');
+  var SpotifyApiUrls = null;
 
   var playlists = new Array();
   var trackCount = 0;
+
+  module.start = function(accessToken) {
+    SpotifyApiUrls = require('./SpotifyApiUrls.js')(accessToken);
+
+    console.log("Start loading playlists...");
+    getPlaylists().then(() => {
+      console.log("Done loading playlists!");
+      console.log("Playlist amount: " + playlists.length);
+      return getPlaylists();
+    }, () => {
+      console.log("Failed loading playlists!");
+      return Promise.reject();
+    }).then(() => {
+      console.log("Start loading tracks...");
+    });
+  }
 
   function getPlaylists() {
     return new Promise(
@@ -46,28 +64,8 @@ var SpotifyApiCom = (function() {
     });
   }
 
-  return function() {
-    return {
-      start: function(accessToken) {
-        SpotifyApiUrls.setAccessToken(accessToken);
-
-        console.log("Start loading playlists...");
-        getPlaylists().then(() => {
-          console.log("Done loading playlists!");
-          console.log("Playlist amount: " + playlists.length);
-          return getPlaylists();
-        }, () => {
-          console.log("Failed loading playlists!");
-          return Promise.reject();
-        }).then(() => {
-          console.log("Start loading tracks...");
-        });
-      }
-    }
-  }
-})();
-
-module.exports = new SpotifyApiCom();
+  return module;
+}();
 
 /*
 function createFile(callback, res) {
