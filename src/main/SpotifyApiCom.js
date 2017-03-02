@@ -2,44 +2,96 @@ module.exports = function() {
   var module = {};
 
   var request = require('request');
+  var OutputFile = require('./OutputFile.js');
 
   var SpotifyApiUrls = null;
 
   var playlists = new Array();
-  var trackCount = 0;
+  var trackAmount = 0;
+
+  module.trackProgress = 0;
 
   module.start = function(accessToken) {
     SpotifyApiUrls = require('./SpotifyApiUrls.js')(accessToken);
 
-    console.log("Start loading playlists...");
-    getPlaylists().then(() => {
-      console.log("Done loading playlists!");
-      console.log("Playlist amount: " + playlists.length);
-      return getPlaylists();
-    }, () => {
-      console.log("Failed loading playlists!");
-      return Promise.reject();
+    processPlaylists().then(() => {
+      countTracks();
+      if (trackAmount > 0) {
+        return OutputFile.create();
+      } else {
+        return Promise.reject();
+      }
     }).then(() => {
-      console.log("Start loading tracks...");
+      return processTracks();
+    }, () => {
+    }).then(() => {
+      console.log("trackAmount: " + trackAmount);
+      console.log("module.trackProgress: " + module.trackProgress);
+    }, () => {
     });
   }
 
-  function getPlaylists() {
+  function processPlaylists() {
+    console.log("Start processing playlists...");
     return new Promise(
       function(resolve, reject) {
         callForEachPage(
-          SpotifyApiUrls.playlists,
+          SpotifyApiUrls.playlists(),
           (body) => {
             if(body && body.hasOwnProperty("items")) {
               playlists = playlists.concat(body.items);
             }
           },
           () => {
+            console.log("Done processing playlists!");
+            console.log("Playlist amount: " + playlists.length);
             resolve();
           },
           () => {
+            console.log("Failed processing playlists!");
             reject();
           });
+      });
+  }
+
+  function countTracks() {
+    for(var i = 0; i < playlists.length; i++) {
+      trackAmount += playlists[i].tracks.total;
+    }
+  }
+
+  function processTracks() {
+    console.log("Start processing tracks...");
+    return new Promise(
+      function(resolve, reject) {
+        processSinglePlaylistsTracks(0);
+
+        function processSinglePlaylistsTracks(currentPlaylist) {
+          console.log(module.trackProgress);
+          OutputFile.append("- " + playlists[currentPlaylist].name);
+          callForEachPage(
+            SpotifyApiUrls.playlists_tracks(playlists[currentPlaylist].tracks.href),
+            (body) => {
+              if(body && body.hasOwnProperty("items")) {
+                for (var i = 0; i < body.items.length; i++) {
+                  OutputFile.append("--- " + body.items[i].track.name);
+                  module.trackProgress++;
+                }
+              }
+            },
+            () => {
+              if (currentPlaylist >= playlists.length - 1) {
+                console.log("Done processing tracks!");
+                resolve();
+              } else {
+                processSinglePlaylistsTracks(++currentPlaylist);
+              }
+            },
+            () => {
+              console.log("Failed processing tracks!");
+              reject();
+            });
+        }
       });
   }
 
@@ -66,20 +118,3 @@ module.exports = function() {
 
   return module;
 }();
-
-/*
-function createFile(callback, res) {
-  dialog.showSaveDialog(function (fileName) {
-    if (fileName === undefined){
-      console.log("File save dialog was canceled by user");
-      res.redirect('/error/?msg=file_save_dialog_canceled')
-    }
-    fs.writeFile(fileName, "", function (err) {
-    if(err){
-      console.log("An error ocurred creating the file "+ err.message)
-    }
-      console.log("The file has been succesfully saved");
-    });
-  });
-}
-*/
