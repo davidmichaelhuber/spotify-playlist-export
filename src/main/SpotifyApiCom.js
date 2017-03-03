@@ -8,8 +8,15 @@ module.exports = function() {
 
   var playlists = new Array();
   var trackAmount = 0;
+  var trackProgress = 0;
 
-  module.trackProgress = 0;
+  module.getProgress = function() {
+    if (trackProgress <= 0) {
+      return 0;
+    } else {
+      return Math.floor((trackProgress / trackAmount) * 100);
+    }
+  }
 
   module.start = function(accessToken) {
     SpotifyApiUrls = require('./SpotifyApiUrls.js')(accessToken);
@@ -25,8 +32,6 @@ module.exports = function() {
       return processTracks();
     }, () => {
     }).then(() => {
-      console.log("trackAmount: " + trackAmount);
-      console.log("module.trackProgress: " + module.trackProgress);
     }, () => {
     });
   }
@@ -67,7 +72,6 @@ module.exports = function() {
         processSinglePlaylistsTracks(0);
 
         function processSinglePlaylistsTracks(currentPlaylist) {
-          console.log(module.trackProgress);
           OutputFile.append("- " + playlists[currentPlaylist].name);
           callForEachPage(
             SpotifyApiUrls.playlists_tracks(playlists[currentPlaylist].tracks.href),
@@ -75,7 +79,7 @@ module.exports = function() {
               if(body && body.hasOwnProperty("items")) {
                 for (var i = 0; i < body.items.length; i++) {
                   OutputFile.append("--- " + body.items[i].track.name);
-                  module.trackProgress++;
+                  trackProgress++;
                 }
               }
             },

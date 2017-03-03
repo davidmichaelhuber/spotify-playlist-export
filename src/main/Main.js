@@ -4,6 +4,7 @@ const url = require('url')
 
 var AuthServer = require('./AuthServer.js');
 var WindowController = require('./WindowController.js');
+var IPC = require('./IPC.js');
 
 function createWindow () {
   // Create the browser window.

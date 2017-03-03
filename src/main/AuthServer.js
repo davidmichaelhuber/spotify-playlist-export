@@ -26,7 +26,7 @@ module.exports = function() {
     app.use(express.static(__dirname + '/public'))
        .use(cookieParser());
 
-    app.use(express.static(__dirname + '/../views'));
+    app.use(express.static(__dirname + '/../renderer'));
 
     app.get('/login', function(req, res) {
       var state = generateRandomString(16);
@@ -109,24 +109,10 @@ module.exports = function() {
     });
 
     app.get('/export', function(req, res) {
-      res.sendFile(path.resolve(__dirname + '/../views/html/main.html'));
+      res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));
       console.log(req.query.accessToken);
       SpotifyApiCom.start(req.query.accessToken);
       console.log("Redirected and SpotifyApiCom started");
-
-      // In main process.
-      const {ipcMain} = require('electron')
-      ipcMain.on('asynchronous-message', (event, arg) => {
-        console.log(arg)  // prints "ping"
-        event.sender.send('asynchronous-reply', 'pong')
-      })
-
-      ipcMain.on('synchronous-message', (event, arg) => {
-        console.log(arg)  // prints "ping"
-        event.returnValue = 'pong'
-      })
-
-
     });
   }
 
