@@ -2,8 +2,8 @@ module.exports = function() {
   var module = {};
 
   var request = require('request');
-  var OutputFile = require('./OutputFile.js');
 
+  var OutputFile = require('./OutputFile.js');
   var SpotifyApiUrls = null;
 
   var playlists = new Array();

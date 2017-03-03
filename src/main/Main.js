@@ -3,14 +3,11 @@ const path = require('path')
 const url = require('url')
 
 var AuthServer = require('./AuthServer.js');
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win
+var WindowController = require('./WindowController.js');
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600})
+  win = WindowController.new("main", {width: 800, height: 600});
 
   AuthServer.start();
 
