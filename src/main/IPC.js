@@ -3,10 +3,25 @@ module.exports = function() {
 
   const {ipcMain} = require('electron');
 
-  var SpotifyApiCom = require('./SpotifyApiCom.js');
+  var ApiData = require('./ApiData.js');
+  var ApiHandler = require('./ApiHandler.js');
+  var WindowHandler = require('./WindowHandler.js');
 
-  ipcMain.on('progress-request', (event, arg) => {
-    event.sender.send('progress-reply', SpotifyApiCom.getProgress());
-  })
+  ipcMain.on('request-playlist-names', (event, arg) => {
 
+    //console.log(ApiData);
+    //console.log(ApiHandler);
+    console.log(WindowHandler);
+
+    /* ApiHandler.fetchPlaylists() not working
+    The reason for this not working is a circular
+    dependency between ApiHandler and IPC */
+    //require('./ApiHandler.js').fetchPlaylists();
+  });
+
+  module.onRequestPlaylistNamesDone = function() {
+    WindowHandler.get("main").webContents.send('response-playlist-names', ApiData.getPlaylistNames());
+  }
+
+  return module;
 }();

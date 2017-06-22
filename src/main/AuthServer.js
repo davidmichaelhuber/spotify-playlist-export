@@ -7,7 +7,8 @@ module.exports = function() {
   var cookieParser = require('cookie-parser');
   var path = require('path');
 
-  var SpotifyApiCom = require('./SpotifyApiCom.js');
+  var ApiHandler = require('./ApiHandler.js');
+  var IPC = require('./IPC.js');
 
   var client_id = process.env.CLIENT_ID;
   var client_secret = process.env.CLIENT_SECRET;
@@ -72,10 +73,8 @@ module.exports = function() {
           if (!error && response.statusCode === 200) {
             var access_token = body.access_token,
                 refresh_token = body.refresh_token;
-            console.log("Access Token received, redirect to /export/?accessToken=...");
             res.redirect('/export/?accessToken=' + access_token);
           } else {
-            console.log("Access Token not received, redirect to /error/?msg=...");
             res.redirect('/error/?msg=access_token_not_received')
           }
         });
@@ -109,10 +108,11 @@ module.exports = function() {
     });
 
     app.get('/export', function(req, res) {
+      ApiHandler.init(req.query.accessToken);
+
+      // Back-end is ready for API communication, load front-end
+      // User input will control further execution
       res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));
-      console.log(req.query.accessToken);
-      SpotifyApiCom.start(req.query.accessToken);
-      console.log("Redirected and SpotifyApiCom started");
     });
   }
 

@@ -2,8 +2,8 @@ module.exports = function(accessToken) {
   var module = {};
 
   const PLAYLISTS_LIMIT = 50;
-  const PLAYLISTS_TRACKS_LIMIT = 100;
-  const PLAYLISTS_TRACKS_FIELDS = "items(track.name),next";
+  const PLAYLIST_TRACK_LIMIT = 100;
+  const PLAYLIST_TRACKS_FIELDS = "items(track.name),next";
 
   module.playlists = function() {
     return {
@@ -13,7 +13,7 @@ module.exports = function(accessToken) {
     }
   };
 
-  module.playlists_tracks = function(url) {
+  module.playlistTracks = function(url) {
     return {
       url: url + '?fields=' + PLAYLISTS_TRACKS_FIELDS + '&limit=' + PLAYLISTS_TRACKS_LIMIT,
       headers: { 'Authorization': 'Bearer ' + accessToken },

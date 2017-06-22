@@ -3,12 +3,11 @@ const path = require('path')
 const url = require('url')
 
 var AuthServer = require('./AuthServer.js');
-var WindowController = require('./WindowController.js');
-var IPC = require('./IPC.js');
+var WindowHandler = require('./WindowHandler.js');
 
 function createWindow () {
   // Create the browser window.
-  win = WindowController.new("main", {width: 800, height: 600});
+  win = WindowHandler.new("main", {width: 800, height: 600});
 
   AuthServer.start();
 
