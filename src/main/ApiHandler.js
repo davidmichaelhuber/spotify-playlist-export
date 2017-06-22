@@ -5,8 +5,7 @@ module.exports = function() {
 
   var ApiData = require('./ApiData.js');
   var ApiOptions = null;
-  var File = require('./File.js');
-  var IPC = require('./IPC.js');
+  var EventBridge = require('./EventBridge.js');
 
   var playlists = null;
 
@@ -18,7 +17,7 @@ module.exports = function() {
     getJson(ApiOptions.playlists()).then(
     (data) => {
       ApiData.setPlaylists(data);
-      IPC.onRequestPlaylistNamesDone();
+      EventBridge.emit('playlists-fetched');
     },
     (error) => {
       console.log("ApiHandler.fetchPlaylists() rejected: " + error);

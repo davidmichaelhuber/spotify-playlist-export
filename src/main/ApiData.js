@@ -1,6 +1,8 @@
 module.exports = function() {
   var module = {};
 
+  var EventBridge = require('./EventBridge.js');
+
   var playlists = null;
   var playlistNames = null;
 

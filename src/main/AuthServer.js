@@ -7,8 +7,7 @@ module.exports = function() {
   var cookieParser = require('cookie-parser');
   var path = require('path');
 
-  var ApiHandler = require('./ApiHandler.js');
-  var IPC = require('./IPC.js');
+  var EventBridge = require('./EventBridge.js');
 
   var client_id = process.env.CLIENT_ID;
   var client_secret = process.env.CLIENT_SECRET;
@@ -108,8 +107,7 @@ module.exports = function() {
     });
 
     app.get('/export', function(req, res) {
-      ApiHandler.init(req.query.accessToken);
-
+      EventBridge.emit('backend-ready', req.query.accessToken);
       // Back-end is ready for API communication, load front-end
       // User input will control further execution
       res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));

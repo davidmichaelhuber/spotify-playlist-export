@@ -5,6 +5,7 @@ ipcRenderer.send('frontend-ready');
 ipcRenderer.send('request-playlist-names');
 
 ipcRenderer.on('response-playlist-names', (event, arg) => {
+  console.log(arg);
 })
 
 /*
