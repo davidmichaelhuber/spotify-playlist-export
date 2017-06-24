@@ -5,9 +5,9 @@ module.exports = function() {
 
   var WindowHandler = require('./WindowHandler.js');
 
-  module.setIpcListener = function(channel, callback) {
+  module.setListener = function(channel, callback) {
     ipcMain.on(channel, (event, arg) => {
-      callback();
+      callback(event, arg);
     });
   }
 

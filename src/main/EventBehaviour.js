@@ -7,13 +7,12 @@ module.exports = function() {
 
   module.onBackendReady = function(arg) {
     ApiHandler.init(arg);
-    IPC.setIpcListener('request-playlist-names', () => {
+    IPC.setListener('request-playlist-names', (event, arg) => {
       ApiHandler.fetchPlaylists();
     })
   }
 
   module.onPlaylistsFetched = function() {
-    console.log(ApiData.getPlaylistNames())
     IPC.send('main', 'response-playlist-names', ApiData.getPlaylistNames());
   }
 

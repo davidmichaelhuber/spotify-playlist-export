@@ -1,22 +1,7 @@
-const {ipcRenderer} = require('electron')
+(function() {
+  const path = require("path");
+  var EventBridge = require(path.resolve('src/renderer/js/EventBridge.js'));
 
-ipcRenderer.send('frontend-ready');
-
-ipcRenderer.send('request-playlist-names');
-
-ipcRenderer.on('response-playlist-names', (event, arg) => {
-  console.log(arg);
-})
-
-/*
-ipcRenderer.on('progress-reply', (event, arg) => {
-  console.log("Export progress: " + arg + "%");
-  if (arg >= 100) {
-    clearInterval(progressUpdateInterval);
-  }
-})
-
-var progressUpdateInterval = setInterval(() => {
-  ipcRenderer.send('progress-request');
-}, 500);
-*/
+  EventBridge.init();
+  EventBridge.emit('request-playlist-names');
+})();
