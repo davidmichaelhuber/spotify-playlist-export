@@ -3,29 +3,25 @@ const path = require('path')
 const url = require('url')
 
 var AuthServer = require('./AuthServer.js');
-var EventBridge = require('./EventBridge.js');
-var WindowHandler = require('./WindowHandler.js');
+var WindowController = require('./WindowController.js');
 
-function init () {
-  EventBridge.init();
+var mainWindow = null;
 
-  // Create the browser window.
-  win = WindowHandler.new("main", {width: 800, height: 600});
-
+function init() {
   AuthServer.start();
 
-  // and load the index.html of the app.
-  win.loadURL("http://localhost:8080/login");
+  WindowController.create('main', {width: 800, height: 600});
+  var mainWindow = WindowController.get('main');
 
-  // Open the DevTools.
-  win.webContents.openDevTools()
+  mainWindow.loadURL("http://localhost:8080/login");
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null
+    mainWindow = null;
   })
 }
 
@@ -46,7 +42,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
+  if (mainWindow === null) {
     init()
   }
 })

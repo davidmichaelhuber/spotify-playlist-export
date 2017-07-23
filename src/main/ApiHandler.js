@@ -4,20 +4,15 @@ module.exports = function() {
   var request = require('request');
 
   var ApiData = require('./ApiData.js');
-  var ApiOptions = null;
-  var EventBridge = require('./EventBridge.js');
+  var ApiOptions = require('./ApiOptions.js');
 
   var playlists = null;
 
-  module.init = function(accessToken) {
-    ApiOptions = require('./ApiOptions.js')(accessToken);
-  }
-
-  module.fetchPlaylists = function() {
+  module.fetchPlaylists = function(callback) {
     getJson(ApiOptions.playlists()).then(
     (data) => {
       ApiData.setPlaylists(data);
-      EventBridge.emit('playlists-fetched');
+      callback();
     },
     (error) => {
       console.log("ApiHandler.fetchPlaylists() rejected: " + error);

@@ -1,26 +1,28 @@
 module.exports = function() {
   var module = {};
 
-  var EventBridge = require('./EventBridge.js');
-
   var playlists = null;
-  var playlistNames = null;
+  var playlistsCompressed = null;
 
   module.setPlaylists = function(data) {
     playlists = data;
   }
 
-  module.getPlaylistNames = function() {
-    if (playlistNames === null) {
-      playlistNames = new Array();
-      for(var i = 0; i < playlists.length; i++) {
-        var items = playlists[i].items;
-        for(var j = 0; j < items.length; j++) {
-          playlistNames.push(items[j].name);
-        }
+  module.getPlaylists = function() {
+    if (playlistsCompressed === null) {
+      playlistsCompressed = new Array();
+    }
+
+    for(var i = 0; i < playlists.length; i++) {
+      var items = playlists[i].items;
+      for(var j = 0; j < items.length; j++) {
+        playlistsCompressed.push({
+          id: items[j].id,
+          name: items[j].name
+        });
       }
     }
-    return playlistNames;
+    return playlistsCompressed;
   };
 
   module.getPlaylistTrackNames = function() {

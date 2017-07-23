@@ -7,7 +7,8 @@ module.exports = function() {
   var cookieParser = require('cookie-parser');
   var path = require('path');
 
-  var EventBridge = require('./EventBridge.js');
+  var ApiController = require('./ApiController.js');
+  var RendererController = require('./RendererController.js');
 
   var client_id = process.env.CLIENT_ID;
   var client_secret = process.env.CLIENT_SECRET;
@@ -107,9 +108,10 @@ module.exports = function() {
     });
 
     app.get('/export', function(req, res) {
-      EventBridge.emit('backend-ready', req.query.accessToken);
+      ApiController.init(req.query.accessToken);
       // Back-end is ready for API communication, load front-end
       // User input will control further execution
+      RendererController.subscribeRendererMessages();
       res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));
     });
   }
