@@ -1,24 +1,35 @@
+// TODO: Use AngularJS for frontend
+
 (function() {
-  /*
-  const path = require("path");
-  var EventBridge = require(path.resolve('src/renderer/js/EventBridge.js'));
-  */
-
   const {ipcRenderer} = require('electron');
+  const path = require("path");
 
-  ipcRenderer.send('main', 'frontend-ready');
+  var EventList = require(path.resolve('src/main/EventList.js'));
 
-  ipcRenderer.on('get-playlists', (event, arg) => {
+  console.log(EventList.frontendReady);
+
+  ipcRenderer.send(EventList.frontendReady);
+
+  ipcRenderer.on(EventList.getPlaylists, (event, arg) => {
     for(var i = 0; i < arg.length; i++) {
       var a = document.createElement('a');
       var li = document.createElement('li');
+
       a.setAttribute('href', "#");
       a.setAttribute('data-playlist-id', arg[i].id);
+      a.classList.add('playlist-button');
       li.innerHTML = arg[i].name;
+
+      a.onclick = function() {
+        console.log(this.getAttribute('data-playlist-id'));
+        ipcRenderer.send(EventList.getTracks, this.getAttribute('data-playlist-id'));
+      };
+
       a.appendChild(li);
+
       document.getElementById('playlists').appendChild(a);
     }
   });
-  ipcRenderer.send('main', 'get-playlists');
+  ipcRenderer.send(EventList.getPlaylists);
 
 })();
