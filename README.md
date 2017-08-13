@@ -10,4 +10,4 @@
 
 - ```npm install```
 - ```npm install electron```
-- ```CLIENT_ID=<Client ID> CLIENT_SECRET=<Client Secret> electron .```
+- ```CLIENT_ID=<Client ID> CLIENT_SECRET=<Client Secret> ./node_modules/.bin/electron .```
