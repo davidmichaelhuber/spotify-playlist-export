@@ -5,24 +5,37 @@ module.exports = function() {
   const PLAYLIST_TRACK_LIMIT = 100;
   const PLAYLIST_TRACKS_FIELDS = "items(track.name),next";
 
-  var _accessToken = null;
+  var __accessToken = null;
+  var __userId = null;
 
   module.setAccessToken = function(accessToken) {
-    _accessToken = accessToken;
+    __accessToken = accessToken;
   }
 
-  module.playlists = function() {
+  module.setUserId = function(userId) {
+    __userId = userId;
+  }
+
+  module.userId = function() {
     return {
-      url: 'https://api.spotify.com/v1/me/playlists?limit=' + PLAYLISTS_LIMIT,
-      headers: { 'Authorization': 'Bearer ' + _accessToken },
+      url: 'https://api.spotify.com/v1/me',
+      headers: { 'Authorization': 'Bearer ' + __accessToken },
       json: true
     }
   };
 
-  module.playlistTracks = function(url) {
+  module.playlists = function() {
     return {
-      url: url + '?fields=' + PLAYLISTS_TRACKS_FIELDS + '&limit=' + PLAYLISTS_TRACKS_LIMIT,
-      headers: { 'Authorization': 'Bearer ' + _accessToken },
+      url: 'https://api.spotify.com/v1/users/' + __userId + '/playlists?limit=' + PLAYLISTS_LIMIT,
+      headers: { 'Authorization': 'Bearer ' + __accessToken },
+      json: true
+    }
+  };
+
+  module.tracks = function(playlistId) {
+    return {
+      url: 'https://api.spotify.com/v1/users/' + __userId + '/playlists/' + playlistId + '/tracks?fields=' + PLAYLIST_TRACKS_FIELDS + '&limit=' + PLAYLIST_TRACK_LIMIT,
+      headers: { 'Authorization': 'Bearer ' + __accessToken },
       json: true
     }
   };

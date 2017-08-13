@@ -3,9 +3,20 @@ module.exports = function() {
 
   var playlists = null;
   var playlistsCompressed = null;
+  var playlistTracksDict = null;
 
   module.setPlaylists = function(data) {
     playlists = data;
+  }
+
+  module.setTracks = function(playlistId, data) {
+    if (playlistTracksDict == null) {
+      playlistTracksDict = new Array();
+    }
+    playlistTracksDict.push({
+      playlistId: playlistId,
+      tracks: data
+    });
   }
 
   module.getPlaylists = function() {
@@ -25,9 +36,13 @@ module.exports = function() {
     return playlistsCompressed;
   };
 
-  module.getPlaylistTrackNames = function() {
-
-  };
+  module.getTracks = function(playlistId) {
+    for (var i = 0; i < playlistTracksDict.length; i++) {
+      if (playlistTracksDict[i].playlistId == playlistId) {
+        return playlistTracksDict[i].tracks;
+      }
+    }
+  }
 
   return module;
 }();

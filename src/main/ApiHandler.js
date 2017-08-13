@@ -8,6 +8,19 @@ module.exports = function() {
 
   var playlists = null;
 
+  module.fetchUserId = function(callback) {
+    getJson(ApiOptions.userId()).then(
+    (data) => {
+      ApiOptions.setUserId(data[0].id);
+      callback();
+    },
+    (error) => {
+      console.log("ApiHandler.fetchUserId() rejected: " + error);
+    }).catch((error) => {
+      console.log("ApiHandler.fetchUserId() caught: " + error);
+    });
+  }
+
   module.fetchPlaylists = function(callback) {
     getJson(ApiOptions.playlists()).then(
     (data) => {
@@ -21,8 +34,17 @@ module.exports = function() {
     });
   }
 
-  module.fetchPlaylistTracks = function(playlist) {
-
+  module.fetchTracks = function(playlistId, callback) {
+    getJson(ApiOptions.tracks(playlistId)).then(
+    (data) => {
+      ApiData.setTracks(playlistId, data);
+      callback(playlistId);
+    },
+    (error) => {
+      console.log("ApiHandler.fetchTracks() rejected: " + error);
+    }).catch((error) => {
+      console.log("ApiHandler.fetchTracks() caught: " + error);
+    });
   }
 
   /*

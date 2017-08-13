@@ -1,5 +1,3 @@
-// TODO: Use AngularJS for frontend
-
 (function() {
   const {ipcRenderer} = require('electron');
   const path = require("path");
@@ -30,6 +28,11 @@
       document.getElementById('playlists').appendChild(a);
     }
   });
+
+  ipcRenderer.on(EventList.getTracks, (event, arg) => {
+    console.log(arg);
+  });
+
   ipcRenderer.send(EventList.getPlaylists);
 
 })();

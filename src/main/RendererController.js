@@ -20,12 +20,15 @@ module.exports = function() {
   function _getPlaylists(arg) {
     console.log('Renderer triggered event: ' + EventList.getPlaylists);
     ApiController.fetchPlaylists(() => {
-      WindowController.get('main').webContents.send('get-playlists', ApiController.getPlaylists());
+      WindowController.send('main', EventList.getPlaylists, ApiController.getPlaylists());
     });
   }
 
   function _getTracks(arg) {
     console.log('Renderer triggered event: ' + EventList.getTracks);
+    ApiController.fetchTracks(arg, (playlistId) => {
+      WindowController.send('main', EventList.getTracks, ApiController.getTracks(playlistId));
+    });
   }
 
   return module;

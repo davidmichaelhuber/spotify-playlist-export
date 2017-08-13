@@ -15,5 +15,9 @@ module.exports = function() {
     return windows[name];
   }
 
+  module.send = function(name, event, data) {
+    this.get(name).webContents.send(event, data);
+  }
+
   return module;
 }();

@@ -108,11 +108,12 @@ module.exports = function() {
     });
 
     app.get('/export', function(req, res) {
-      ApiController.init(req.query.accessToken);
-      // Back-end is ready for API communication, load front-end
-      // User input will control further execution
-      RendererController.subscribeRendererMessages();
-      res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));
+      ApiController.init(req.query.accessToken, () => {
+        // Back-end is ready for API communication, load front-end
+        // User input will control further execution
+        RendererController.subscribeRendererMessages();
+        res.sendFile(path.resolve(__dirname + '/../renderer/html/main.html'));
+      });
     });
   }
 
