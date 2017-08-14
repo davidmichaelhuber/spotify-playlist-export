@@ -1,7 +1,7 @@
 module.exports = function() {
   var module = {};
 
-  var request = require('request');
+  var Request = require('request');
 
   var ApiData = require('./ApiData.js');
   var ApiOptions = require('./ApiOptions.js');
@@ -55,7 +55,7 @@ module.exports = function() {
       var data = new Array();
       function getAllPages() {
         if (!isEmpty(options.url)) {
-          request.get(options, function(error, response, body) {
+          Request.get(options, function(error, response, body) {
             if (error || response.statusCode !== 200) {
               reject("ApiHandler.getJson() failed - " + error);
             }

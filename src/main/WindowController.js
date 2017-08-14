@@ -8,6 +8,7 @@ module.exports = function() {
   module.create = function(name, options) {
     // TODO: Check if window with given name already exists
     windows[name] = new BrowserWindow(options);
+    return windows[name];
   }
 
   module.get = function(name, options) {
