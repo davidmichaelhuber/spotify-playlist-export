@@ -3,7 +3,6 @@ module.exports = function() {
 
   var Request = require('request');
 
-  var ApiData = require('./ApiData.js');
   var ApiOptions = require('./ApiOptions.js');
 
   var playlists = null;
@@ -24,8 +23,7 @@ module.exports = function() {
   module.fetchPlaylists = function(callback) {
     getJson(ApiOptions.playlists()).then(
     (data) => {
-      ApiData.setPlaylists(data);
-      callback();
+      callback(data);
     },
     (error) => {
       console.log("ApiHandler.fetchPlaylists() rejected: " + error);
@@ -37,8 +35,7 @@ module.exports = function() {
   module.fetchTracks = function(playlistId, callback) {
     getJson(ApiOptions.tracks(playlistId)).then(
     (data) => {
-      ApiData.setTracks(playlistId, data);
-      callback(playlistId);
+      callback(playlistId, data);
     },
     (error) => {
       console.log("ApiHandler.fetchTracks() rejected: " + error);

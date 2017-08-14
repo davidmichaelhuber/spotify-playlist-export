@@ -8,26 +8,32 @@ module.exports = function() {
   var WindowController = require('./WindowController.js');
 
   module.subscribeRendererMessages = function() {
-    IpcMain.on(EventList.getPlaylists, (event, arg) => {
-      __getPlaylists(arg);
+    IpcMain.on(EventList.fetchPlaylists, (event, arg) => {
+      __fetchPlaylists();
     });
 
-    IpcMain.on(EventList.getTracks, (event, arg) => {
-      __getTracks(arg);
-    });
-  }
-
-  function __getPlaylists(arg) {
-    console.log('Renderer triggered event: ' + EventList.getPlaylists);
-    ApiController.fetchPlaylists(() => {
-      WindowController.send('main', EventList.getPlaylists, ApiController.getPlaylists());
+    IpcMain.on(EventList.fetchTracks, (event, arg) => {
+      __fetchTracks(arg);
     });
   }
 
-  function __getTracks(arg) {
-    console.log('Renderer triggered event: ' + EventList.getTracks);
-    ApiController.fetchTracks(arg, (playlistId) => {
-      WindowController.send('main', EventList.getTracks, ApiController.getTracks(playlistId));
+  function __fetchPlaylists() {
+    console.log('Renderer triggered event: ' + EventList.fetchPlaylists);
+    ApiController.fetchPlaylists((data) => {
+      WindowController.send(
+        'main',
+        EventList.fetchPlaylists,
+        data);
+    });
+  }
+
+  function __fetchTracks(playlistId) {
+    console.log('Renderer triggered event: ' + EventList.fetchTracks);
+    ApiController.fetchTracks(playlistId, (playlistId, data) => {
+      WindowController.send(
+        'main',
+        EventList.fetchTracks,
+        data);
     });
   }
 
