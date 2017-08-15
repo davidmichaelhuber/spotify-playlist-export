@@ -3,7 +3,6 @@ module.exports = function() {
 
   const PLAYLISTS_LIMIT = 50;
   const PLAYLIST_TRACK_LIMIT = 100;
-  const PLAYLIST_TRACKS_FIELDS = "items(track.name),next";
 
   var __accessToken = null;
   var __userId = null;
@@ -34,7 +33,7 @@ module.exports = function() {
 
   module.tracks = function(playlistId) {
     return {
-      url: 'https://api.spotify.com/v1/users/' + __userId + '/playlists/' + playlistId + '/tracks?fields=' + PLAYLIST_TRACKS_FIELDS + '&limit=' + PLAYLIST_TRACK_LIMIT,
+      url: 'https://api.spotify.com/v1/users/' + __userId + '/playlists/' + playlistId + '/tracks?limit=' + PLAYLIST_TRACK_LIMIT,
       headers: { 'Authorization': 'Bearer ' + __accessToken },
       json: true
     }

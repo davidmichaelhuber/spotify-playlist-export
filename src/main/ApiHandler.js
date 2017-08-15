@@ -8,7 +8,7 @@ module.exports = function() {
   var playlists = null;
 
   module.fetchUserId = function(callback) {
-    getJson(ApiOptions.userId()).then(
+    __getJson(ApiOptions.userId()).then(
     (data) => {
       ApiOptions.setUserId(data[0].id);
       callback();
@@ -21,7 +21,7 @@ module.exports = function() {
   }
 
   module.fetchPlaylists = function(callback) {
-    getJson(ApiOptions.playlists()).then(
+    __getJson(ApiOptions.playlists()).then(
     (data) => {
       callback(data);
     },
@@ -33,7 +33,7 @@ module.exports = function() {
   }
 
   module.fetchTracks = function(playlistId, callback) {
-    getJson(ApiOptions.tracks(playlistId)).then(
+    __getJson(ApiOptions.tracks(playlistId)).then(
     (data) => {
       callback(playlistId, data);
     },
@@ -47,14 +47,14 @@ module.exports = function() {
   /*
   Gets JSON from options.url
   */
-  var getJson = function(options) {
+  function __getJson(options) {
     return new Promise(function(resolve, reject) {
       var data = new Array();
       function getAllPages() {
         if (!isEmpty(options.url)) {
           Request.get(options, function(error, response, body) {
             if (error || response.statusCode !== 200) {
-              reject("ApiHandler.getJson() failed - " + error);
+              reject("ApiHandler.__getJson() failed - " + error);
             }
             data.push(body);
             options.url = body.next;

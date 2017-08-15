@@ -1,20 +1,17 @@
 (function() {
-  const {ipcRenderer:IpcRenderer} = require('electron');
+  const {ipcRenderer: IpcRenderer} = require('electron');
   const Path = require("path");
 
-  var EventList = require(Path.resolve('src/main/EventList.js'));
+  var Spotify = require(Path.resolve('src/renderer/js/Spotify.js'));
 
-  IpcRenderer.on(EventList.fetchPlaylists, (event, arg) => {
-    console.log(arg);
+  Spotify.playlists()
+  .then((playlists) => {
+    console.log(playlists);
+    return Spotify.tracks("5yCMlatWwA4iNGVXlyKTjp");
+  })
+  .then((tracks) => {
+    console.log(tracks);
   });
-
-  IpcRenderer.on(EventList.fetchTracks, (event, arg) => {
-    console.log(arg);
-  });
-
-  IpcRenderer.send(EventList.frontendReady);
-  IpcRenderer.send(EventList.fetchPlaylists);
-  IpcRenderer.send(EventList.fetchTracks, "5yCMlatWwA4iNGVXlyKTjp");
 
   /*
     console.log(EventList.frontendReady);
