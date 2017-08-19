@@ -27,13 +27,13 @@ module.exports = function() {
     });
   }
 
-  function __fetchTracks(playlistId) {
-    console.log('Renderer triggered event: ' + EventList.fetchTracks);
-    ApiController.fetchTracks(playlistId, (playlistId, data) => {
+  function __fetchTracks(url) {
+    console.log('Renderer triggered event: ' + EventList.fetchTracks + " url: " + url);
+    ApiController.fetchTracks(url, (url, data) => {
       WindowController.send(
         'main',
         EventList.fetchTracks,
-        data);
+        [url, data]);
     });
   }
 

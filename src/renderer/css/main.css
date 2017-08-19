@@ -1,59 +1,20 @@
-/*
-List style
-Credits: http://red-team-design.com/css3-ordered-list-styles/
-*/
-
-ol {
-  list-style-type: none;
-}
-
-.rectangle-list li:first-child a {
-  margin: 0 2.5em .5em 0;
-}
-
-.rectangle-list a{
-  position: relative;
-  display: block;
-  padding: .4em .4em .4em .8em;
-  *padding: .4em;
-  margin: .5em 2.5em .5em 0;
-  background: #ddd;
-  color: #444;
-  text-decoration: none;
-  transition: all .3s ease-out;
-}
-
-.rectangle-list a:hover{
-  background: #eee;
-}
-
-.rectangle-list a:before{
-  content: "R";
+#playlist-selection {
   position: absolute;
-  right: -2.5em;
-  top: 50%;
-  margin-top: -1em;
-  background: #fa8072;
-  height: 2em;
-  width: 2em;
-  line-height: 2em;
-  text-align: center;
-  font-weight: bold;
+  left: 0;
+  right: 20%;
+  height: 100%;
+  overflow: auto;
 }
 
-.rectangle-list a:after{
+#menu {
   position: absolute;
-  content: '';
-  border: .5em solid transparent;
-  right: -1em;
-  top: 50%;
-  margin-top: -.5em;
-  transition: all .3s ease-out;
+  left: 80%;
+  right: 0;
+  height: 100%;
+  display: none;
 }
 
-.rectangle-list a:hover:after{
-  right: -.5em;
-  border-right-color: #fa8072;
+button {
+  width: 100%;
+  height: 50px;
 }
-
-/* ... */

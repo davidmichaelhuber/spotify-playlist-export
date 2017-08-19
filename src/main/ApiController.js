@@ -13,8 +13,8 @@ module.exports = function() {
     ApiHandler.fetchPlaylists(callback);
   }
 
-  module.fetchTracks = function(playlistId, callback) {
-    ApiHandler.fetchTracks(playlistId, callback);
+  module.fetchTracks = function(url, callback) {
+    ApiHandler.fetchTracks(url, callback);
   }
 
   return module;
