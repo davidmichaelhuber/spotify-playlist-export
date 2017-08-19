@@ -57,17 +57,28 @@ module.exports = function() {
           function fetchAllPlaylists(i) {
             Spotify.fetchTracks(playlistUrls[i])
             .then((tracks) => {
-              console.log(tracks);
               tracks.playlistName = Storage.getPlaylists()[i].name;
-              File.append(file, JSON.stringify(tracks, null, 2));
+
+              if(i == 0) {
+                File.append(file, "[" + JSON.stringify(tracks, null, 2) + ",");
+              }
+              else if(i == playlistUrls.length - 1) {
+                File.append(file, JSON.stringify(tracks, null, 2) + "]");
+              }
+              else {
+                File.append(file, JSON.stringify(tracks, null, 2) + ",");
+              }
+
+              console.log("Fetched " + (i+1) + " out of " + playlistUrls.length);
+
               if (i < playlistUrls.length - 1) {
-                console.log(i);
                 fetchAllPlaylists(++i);
               }
             });
           }
 
           fetchAllPlaylists(0);
+
         });
       };
     },
