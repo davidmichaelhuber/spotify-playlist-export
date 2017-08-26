@@ -3,7 +3,7 @@ module.exports = function() {
 
   const PLAYLISTS_LIMIT = 50;
   const PLAYLIST_TRACK_LIMIT = 100;
-  const PLAYLIST_TRACK_FIELDS = "items(track.name, track.artists.name,track.album.name),next";
+  const PLAYLIST_TRACK_FIELDS = "items(track.id, track.name, track.artists.name,track.album.name),next";
 
   var __accessToken = null;
   var __userId = null;
