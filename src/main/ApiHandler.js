@@ -5,8 +5,6 @@ module.exports = function() {
 
   var ApiOptions = require('./ApiOptions.js');
 
-  var playlists = null;
-
   module.fetchUserId = function(callback) {
     __getJson(ApiOptions.userId()).then(
     (data) => {
@@ -32,13 +30,14 @@ module.exports = function() {
     });
   }
 
-  module.fetchTracks = function(playlistId, callback) {
-    __getJson(ApiOptions.tracks(playlistId)).then(
+  module.fetchTracks = function(url, callback) {
+    __getJson(ApiOptions.tracks(url)).then(
     (data) => {
-      callback(playlistId, data);
+      callback(url, data);
     },
     (error) => {
       console.log("ApiHandler.fetchTracks() rejected: " + error);
+      callback(null, null);
     }).catch((error) => {
       console.log("ApiHandler.fetchTracks() caught: " + error);
     });
